@@ -1,5 +1,4 @@
 # ===================== IMPORTS ============================================== #
-from genericpath import isdir
 import os
 import sys
 import tempfile
