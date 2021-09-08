@@ -1,0 +1,47 @@
+# ===================== IMPORTS ============================================== #
+from genericpath import isdir
+import os
+import sys
+import tempfile
+
+# ===================== CONSTANTS ============================================ #
+INPUT_FORMATS = [".mp4", ".mkv", ".avi"]
+OUTPUT_FORMAT = ".mp4"
+TMP_FILE_PREFIX = "compressed_video_"
+ARG_INDEX_PATH = 1
+
+# ===================== AUXILIARY FUNCTIONS ================================== #
+def list_files_by_extension_recursive(directory, extension):
+    output_list = []
+    list_extensions = []
+    if type(extension) == type(""):
+        list_extensions = [extension]
+    elif type(extension) == type([]):
+        list_extensions = extension
+    for root, dirs, files in os.walk(directory):
+        for file_item in files:
+            file_path = os.path.join(root, file_item)
+            for ext in list_extensions:
+                if file_path.endswith(ext):
+                    output_list.append(os.path.join(directory, file_path))
+    return output_list
+
+# ===================== MAIN SCRIPT ========================================== #
+# --------------------- Argument validation
+input_arg = sys.argv[ARG_INDEX_PATH]
+if os.path.isfile(input_arg):
+    list_videos = [input_arg]
+elif os.path.isdir(input_arg):
+    list_videos = list_files_by_extension_recursive(input_arg, INPUT_FORMATS)
+else:
+    print("Invalid path")
+    exit()
+# --------------------- Video conversion
+fp, temp_video_path = tempfile.mkstemp(suffix=OUTPUT_FORMAT, prefix=TMP_FILE_PREFIX)
+os.close(fp)
+os.remove(temp_video_path)
+for input_video_path in list_videos:
+    output_video_path = os.path.splitext(input_video_path)[0] + OUTPUT_FORMAT
+    os.system(f"ffmpeg -i \"{input_video_path}\" -vcodec libx265 -crf 28 \"{temp_video_path}\"")
+    os.remove(input_video_path)
+    os.replace(temp_video_path, output_video_path)
