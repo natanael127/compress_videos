@@ -8,6 +8,7 @@ INPUT_FORMATS = [".mp4", ".mkv", ".avi"]
 OUTPUT_FORMAT = ".mp4"
 TMP_FILE_PREFIX = "compressed_video_"
 ARG_INDEX_PATH = 1
+FILE_ERROR_LOG = "video_compression_errors.log"
 
 # ===================== AUXILIARY FUNCTIONS ================================== #
 def list_files_by_extension_recursive(directory, extension):
@@ -41,6 +42,10 @@ os.close(fp)
 os.remove(temp_video_path)
 for input_video_path in list_videos:
     output_video_path = os.path.splitext(input_video_path)[0] + OUTPUT_FORMAT
-    os.system(f"ffmpeg -i \"{input_video_path}\" -vcodec libx265 -crf 28 \"{temp_video_path}\"")
-    os.remove(input_video_path)
-    os.replace(temp_video_path, output_video_path)
+    cmd_result = os.system(f"ffmpeg -i \"{input_video_path}\" -vcodec libx265 -crf 28 \"{temp_video_path}\"")
+    if cmd_result == 0: # Success
+        os.remove(input_video_path)
+        os.replace(temp_video_path, output_video_path)
+    else: # Error
+        with open(FILE_ERROR_LOG, "a", encoding="utf-8") as fp:
+            fp.write("Returned " + str(cmd_result) + " for file \"" + input_video_path + "\"\n")
