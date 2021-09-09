@@ -48,6 +48,8 @@ for input_video_path in list_videos:
         os.remove(input_video_path)
         os.replace(temp_video_path, output_video_path)
     else: # Error
+        if os.path.isfile(temp_video_path):
+            os.remove(temp_video_path)
         error_log = "[" + time.strftime("%Y-%m-%d %H:%M:%S") + "] Returned " + str(cmd_result) + " for file \"" + input_video_path + "\"\n"
         with open(FILE_ERROR_LOG, "a", encoding="utf-8") as fp:
             fp.write(error_log)
