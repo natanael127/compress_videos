@@ -3,6 +3,7 @@ import os
 import sys
 import time
 import tempfile
+import pyinputplus
 
 # ===================== CONSTANTS ============================================ #
 INPUT_FORMATS = [".mp4", ".mkv", ".avi"]
@@ -34,6 +35,12 @@ if os.path.isfile(input_arg):
     list_videos = [input_arg]
 elif os.path.isdir(input_arg):
     list_videos = list_files_by_extension_recursive(input_arg, INPUT_FORMATS)
+    for item in list_videos:
+        print(item)
+    print("\nListed items will be converted")
+    yes_or_no = pyinputplus.inputYesNo("Do you accept? [Y/N]: ")
+    if yes_or_no == "no":
+        exit()
 else:
     print("Invalid path")
     exit()
