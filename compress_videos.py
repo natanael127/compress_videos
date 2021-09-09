@@ -2,6 +2,7 @@
 import os
 import sys
 import time
+import shutil
 import tempfile
 import pyinputplus
 
@@ -53,7 +54,7 @@ for input_video_path in list_videos:
     cmd_result = os.system(f"ffmpeg -i \"{input_video_path}\" -vcodec libx265 -crf 28 \"{temp_video_path}\"")
     if cmd_result == 0: # Success
         os.remove(input_video_path)
-        os.replace(temp_video_path, output_video_path)
+        shutil.move(temp_video_path, output_video_path)
     else: # Error
         if os.path.isfile(temp_video_path):
             os.remove(temp_video_path)
