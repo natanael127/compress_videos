@@ -7,7 +7,7 @@ import tempfile
 import pyinputplus
 
 # ===================== CONSTANTS ============================================ #
-INPUT_FORMATS = [".mp4", ".mkv", ".avi"]
+INPUT_FORMATS = [".mp4", ".mkv", ".avi", ".MOV"]
 OUTPUT_FORMAT = ".mp4"
 TMP_FILE_PREFIX = "compressed_video_"
 ARG_INDEX_PATH = 1
