@@ -49,10 +49,12 @@ else:
 fp, temp_video_path = tempfile.mkstemp(suffix=OUTPUT_FORMAT, prefix=TMP_FILE_PREFIX)
 os.close(fp)
 os.remove(temp_video_path)
+storage_saving = 0
 for input_video_path in list_videos:
     output_video_path = os.path.splitext(input_video_path)[0] + OUTPUT_FORMAT
     cmd_result = os.system(f"ffmpeg -i \"{input_video_path}\" -vcodec libx265 -crf 28 \"{temp_video_path}\"")
     if cmd_result == 0: # Success
+        storage_saving += os.path.getsize(input_video_path) - os.path.getsize(temp_video_path)
         os.remove(input_video_path)
         shutil.move(temp_video_path, output_video_path)
     else: # Error
@@ -61,3 +63,4 @@ for input_video_path in list_videos:
         error_log = "[" + time.strftime("%Y-%m-%d %H:%M:%S") + "] Returned " + str(cmd_result) + " for file \"" + input_video_path + "\"\n"
         with open(FILE_ERROR_LOG, "a", encoding="utf-8") as fp:
             fp.write(error_log)
+print(f"================\nYou have just saved {storage_saving} bytes")
