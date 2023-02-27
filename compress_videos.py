@@ -29,6 +29,14 @@ def list_files_by_extension_recursive(directory, extension):
                     output_list.append(os.path.join(directory, file_path))
     return output_list
 
+def data_size_string(num_bytes):
+    units = ['', 'Ki', 'Mi', 'Gi']
+    i = 0
+    while abs(num_bytes) >= 1024.0 and i < len(units) - 1:
+        num_bytes /= 1024.0
+        i += 1
+    return f"{num_bytes:,.3f} {units[i]}B"
+
 # ===================== MAIN SCRIPT ========================================== #
 # --------------------- Argument validation
 input_arg = sys.argv[ARG_INDEX_PATH]
@@ -63,4 +71,4 @@ for input_video_path in list_videos:
         error_log = "[" + time.strftime("%Y-%m-%d %H:%M:%S") + "] Returned " + str(cmd_result) + " for file \"" + input_video_path + "\"\n"
         with open(FILE_ERROR_LOG, "a", encoding="utf-8") as fp:
             fp.write(error_log)
-print(f"================\nYou have just saved {storage_saving} bytes")
+print(f"================\nYou have just saved {data_size_string(storage_saving)}")
