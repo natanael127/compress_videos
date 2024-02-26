@@ -40,6 +40,7 @@ def data_size_string(num_bytes):
 # ===================== MAIN SCRIPT ========================================== #
 # --------------------- Argument validation
 input_arg = sys.argv[ARG_INDEX_PATH]
+input_arg = os.path.abspath(input_arg)
 if os.path.isfile(input_arg):
     list_videos = [input_arg]
 elif os.path.isdir(input_arg):
