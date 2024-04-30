@@ -45,6 +45,7 @@ if os.path.isfile(input_arg):
     list_videos = [input_arg]
 elif os.path.isdir(input_arg):
     list_videos = list_files_by_extension_recursive(input_arg, INPUT_FORMATS)
+    list_videos.sort()
     for item in list_videos:
         print(item)
     print("\nListed items will be converted")
